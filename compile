@@ -1,0 +1,1 @@
+gcc -faggressive-loop-optimizations -fwhole-program -funsafe-loop-optimizations -fpartial-inlining -fpeephole -fpeel-loops -fomit-frame-pointer -finline -finline-functions -ffunction-cse -fgcse -O3 -DNDEBUG bits/arr.c bits/board.c bits/dbg.c bits/generate.c bits/rand.c bits/read.c bits/solve.c main.c
