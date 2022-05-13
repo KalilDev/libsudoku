@@ -24,7 +24,6 @@ typedef bool (*sudoku_solver)(s_board_t board);
     }                                                                          \
     const s_size side_sqrt = _side_sqrt;                                       \
     const s_size side = _side;                                                 \
-    const s_size side_squared = _side * _side;                                 \
     /* steps: */                                                               \
     /* for each value */                                                       \
     for (s_size r = start_r; r < side; r++) {                                  \
