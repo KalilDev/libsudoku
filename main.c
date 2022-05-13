@@ -100,3 +100,4 @@ int main() {
   return main_generate();
 #endif
 }
+#endif
