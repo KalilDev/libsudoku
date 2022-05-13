@@ -4,16 +4,17 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 void generate(s_board_t board) {
   s_size side = s_board_side(board);
   s_size side_sqrt = s_board_side_sqrt(board);
   // initialize the board to zero
-  for (s_size r = 0; r < side; r++) {
-    for (s_size c = 0; c < side; c++) {
-      s_board_set_at(board, r, c, 0);
-    }
-  }
+  memset(board.board, 0, sizeof(s_el) * s_board_side_squared(board));
+  printf("gonna print zeroed board at generate with memset\n");
+  print_board(board);
+  fflush(stdout);
+  printf("\n");
   // create an arr to store every possibility in the row. outside the loop to
   // avoid messing with the stack too much.
   s_el __arr[side];
