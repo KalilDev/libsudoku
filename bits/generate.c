@@ -1,4 +1,5 @@
 #include "generate.h"
+#include "dbg.h"
 #include "rand.h"
 #include "solve.h"
 #include <assert.h>
@@ -49,15 +50,15 @@ void generate(s_board_t board) {
     }
   }
 
-  // print_board(board);
-  fflush(stdout);
+  dbg_print_board(board);
+  dbg_flush();
   // now, we are left with an sudoku that has side_sqrt^3 filled cells and
   // side_sqrt^4 - side_sqrt^3 empty cells.
   // this is way less empty cells than what we would have if we only generated a
   // single row/column/diagonal, and it is guaranteed to be solvable.
   bool solved = solve_sudoku(board);
-  // print_board(board);
-  fflush(stdout);
+  dbg_print_board(board);
+  dbg_flush();
 
   assert(solved);
 }
