@@ -58,7 +58,7 @@ void remove_already_present_on_column(s_board_t board, s_size column,
                                       s_el_array_t *array) {
   for (s_size r = 0; r < s_board_side(board); r++) {
     s_el value = s_board_get_at(board, r, column);
-    remove_from_el_arr(array, s_board_get_at(board, r, column));
+    remove_from_el_arr(array, value);
     dbg_print_removed(column, value);
   };
 }
