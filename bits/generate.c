@@ -1,4 +1,5 @@
 #include "generate.h"
+#include "arr.h"
 #include "board.h"
 #include "dbg.h"
 #include "rand.h"
@@ -18,37 +19,27 @@ void s_sudoku_generate(s_board_t board) {
   print_board(board);
   fflush(stdout);
   printf("\n");
-  // create an arr to store every possibility in the row. outside the loop to
-  // avoid messing with the stack too much.
-  s_el __arr[side];
-  s_el_array_t arr = s_el_arr_from_buff(__arr, side);
-  // create an arr to store every possibility in the cell. outside the loop to
-  // avoid messing with the stack too much.
-  s_el __poss[side];
-  s_el_array_t poss = s_el_arr_from_buff(__arr, side);
   // generate the first row of each square. steps:
-  // for each column with step of side_sqrt
+  // for each col with step of side_sqrt
   for (s_size r = 0; r < side; r += side_sqrt) {
-    // reset the row possibilities array
-    arr.length = side;
-    s_el_arr_initialize_1_to_len(&arr);
     // for each column
+    // create an array with the possible values
+    s_el __poss[side];
+    s_el_array_t poss = s_el_arr_from_buff(__poss, side);
+    s_el_arr_initialize_1_to_len(&poss);
     for (s_size c = 0; c < side; c++) {
-      // in each cell
-      // initialize the possibilities to be the remaining values in the row
-      poss.length = arr.length;
-      for (s_size i = 0; i < arr.length; i++) {
-        poss.arr[i] = arr.arr[i];
-      }
-      // remove the values already on the column
-      remove_already_present_on_column(board, c, &poss);
-
-      // chose an value from the possibilities
-      s_el chosen = poss.arr[rand() % poss.length];
+      // find an safe value
+      s_el safe = 0;
+      do {
+        s_el value = poss.arr[rand() % poss.length];
+        if (s_board_is_value_safe(board, r, c, value)) {
+          safe = value;
+        }
+      } while (!safe);
       // remove it from the row possibilities
-      remove_from_el_arr(&arr, chosen);
+      remove_from_el_arr(&poss, safe);
       // commit it to the board
-      s_board_set_at(board, r, c, chosen);
+      s_board_set_at(board, r, c, safe);
     }
   }
 

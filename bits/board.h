@@ -2,6 +2,7 @@
 #define S_BOARD_H
 #include "arr.h"
 #include "type.h"
+#include <stdbool.h>
 
 typedef struct s_board {
   s_el *board;
@@ -49,37 +50,32 @@ inline s_board_t s_board_from_buff_maybe_inlined(s_el *board,
   return result;
 }
 #else
-static s_size index_from_coordinates_maybe_inlined(s_size r, s_size c,
-                                                   s_size side);
+s_size index_from_coordinates_maybe_inlined(s_size r, s_size c, s_size side);
 
-static s_size s_board_side_sqrt_maybe_inlined(s_board_t board);
+s_size s_board_side_sqrt_maybe_inlined(s_board_t board);
 
-static s_size s_board_side_maybe_inlined(s_board_t board);
-static s_size s_board_side_squared_maybe_inlined(s_board_t board);
+s_size s_board_side_maybe_inlined(s_board_t board);
+s_size s_board_side_squared_maybe_inlined(s_board_t board);
 
-static s_el s_board_get_at_maybe_inlined(s_board_t board, s_size r, s_size c);
-static s_el s_board_get_at_i_maybe_inlined(s_board_t board, s_size i);
+s_el s_board_get_at_maybe_inlined(s_board_t board, s_size r, s_size c);
+s_el s_board_get_at_i_maybe_inlined(s_board_t board, s_size i);
 
-static void s_board_set_at_i_maybe_inlined(s_board_t board, s_size i,
-                                           s_el value);
+void s_board_set_at_i_maybe_inlined(s_board_t board, s_size i, s_el value);
 
-static s_board_t s_board_from_buff_maybe_inlined(s_el *board, s_size side_sqrt);
+s_board_t s_board_from_buff_maybe_inlined(s_el *board, s_size side_sqrt);
 #endif
 
 s_board_t s_board_from_buff(s_el *board, s_size side_sqrt);
 
 void print_board(const s_board_t board);
-void remove_already_present_on_row(s_board_t board, s_size row,
-                                   s_el_array_t *array);
 
-void remove_already_present_on_column(s_board_t board, s_size column,
-                                      s_el_array_t *array);
-void remove_already_present_on_square(s_board_t board, s_size r, s_size c,
-                                      s_el_array_t *array);
+bool s_board_is_value_safe(s_board_t board, s_size r, s_size c, s_el attempt);
 
 void s_board_set_at(s_board_t board, s_size r, s_size c, s_el value);
 
 void s_board_copy_into(s_board_t dest, const s_board_t src);
+
+bool s_board_equals(const s_board_t a, const s_board_t b);
 
 void s_board_initialize_to_zero(s_board_t board);
 

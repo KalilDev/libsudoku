@@ -25,7 +25,13 @@ int main_generate() {
   //   return 1;
   // }
   const s_size side = side_sqrt * side_sqrt;
-  s_el __solved_board[side][side];
+  s_el __solved_board[9][9] = {
+      {1, 0, 0, 8, 0, 0, 3, 0, 0}, {3, 0, 0, 6, 0, 0, 7, 0, 0},
+      {8, 0, 0, 1, 0, 0, 6, 0, 0}, {6, 0, 0, 2, 0, 0, 4, 0, 0},
+      {4, 0, 0, 9, 0, 0, 1, 0, 0}, {5, 0, 0, 7, 0, 0, 2, 0, 0},
+      {2, 0, 0, 3, 0, 0, 5, 0, 0}, {7, 0, 0, 4, 0, 0, 9, 0, 0},
+      {9, 0, 0, 5, 0, 0, 8, 0, 0},
+  };
   s_board_t solved_board = s_board_from_buff((s_el *)__solved_board, side_sqrt);
   s_el __board[side][side];
   s_board_t board = s_board_from_buff((s_el *)__board, side_sqrt);
@@ -34,9 +40,16 @@ int main_generate() {
   fflush(stdout);
   print_board(solved_board);
   printf("\n");
-  s_sudoku_generate(solved_board);
+  // s_sudoku_generate(solved_board);
   printf("gonna print board at main\n");
+  s_sudoku_solve(solved_board);
+  print_board(solved_board);
   fflush(stdout);
+  __solved_board[6][5] = 0;
+  puts("");
+  print_board(solved_board);
+  fflush(stdout);
+  printf("has one soln: %i\n", !s_sudoku_has_many_sols(solved_board));
   print_board(solved_board);
   fflush(stdout);
   return 0;
