@@ -31,3 +31,6 @@ void s_el_arr_initialize_1_to_len(s_el_array_t *arr);
 
 void remove_from_el_arr(s_el_array_t *array, s_el value);
 #endif
+void s_el_arr_initialize_1_to_4(s_el_array_t *arr);
+void s_el_arr_initialize_1_to_9(s_el_array_t *arr);
+void s_el_arr_initialize_1_to_16(s_el_array_t *arr);

@@ -1,6 +1,7 @@
 #include "arr.h"
 #include "inline.h"
 #include "type.h"
+#include <string.h>
 
 void swap_el(s_el *left, s_el *right) {
   s_el old_left = *left;
@@ -27,6 +28,9 @@ void s_el_arr_initialize_1_to_len(s_el_array_t *arr) {
 #endif
 
 void remove_from_el_arr(s_el_array_t *array, s_el value) {
+  if (value == 0) {
+    return;
+  }
   s_size length = array->length;
   if (length == 0) {
     return;
@@ -42,4 +46,19 @@ void remove_from_el_arr(s_el_array_t *array, s_el value) {
   if (arr[length - 1] == value) {
     array->length = length - 1;
   }
+}
+
+static const s_el s_el_arr_1_to_4[] = {1, 2, 3, 4};
+static const s_el s_el_arr_1_to_9[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+static const s_el s_el_arr_1_to_16[] = {1, 2,  3,  4,  5,  6,  7,  8,
+                                        9, 10, 11, 12, 13, 14, 15, 16};
+
+void s_el_arr_initialize_1_to_4(s_el_array_t *arr) {
+  memcpy(arr->arr, s_el_arr_1_to_4, sizeof(s_el) * 4);
+}
+void s_el_arr_initialize_1_to_9(s_el_array_t *arr) {
+  memcpy(arr->arr, s_el_arr_1_to_9, sizeof(s_el) * 9);
+}
+void s_el_arr_initialize_1_to_16(s_el_array_t *arr) {
+  memcpy(arr->arr, s_el_arr_1_to_16, sizeof(s_el) * 16);
 }

@@ -8,6 +8,24 @@
 
 typedef bool (*sudoku_solver)(s_board_t board);
 
+#define __BACKTRACK_SOLVE_BAIL_OUT                                             \
+  /* if there are no possibilities left, the sudoku is at an unsolvable        \
+   * state */                                                                  \
+  if (poss.length == 0) {                                                      \
+    dbg_printf("no available at r: %d, c: %d\n", r, c);                        \
+    dbg_flush();                                                               \
+    return false;                                                              \
+  }                                                                            \
+  /* if there is only one possibility, commit it. this avoids creating         \
+   * a*/                                                                       \
+  /*new board and all the other expensive stuff*/                              \
+  if (poss.length == 1) {                                                      \
+    s_board_set_at(board, r, c, poss.arr[0]);                                  \
+    dbg_printf("found single at r: %d, c: %d = %d\n", r, c, poss.arr[0]);      \
+    dbg_flush();                                                               \
+    continue;                                                                  \
+  }
+
 #define BACKTRACK_SOLVE_IMPL_NO_DIRECTION(_side, _side_sqrt)                   \
   BACKTRACK_SOLVE_SIGNATURE(_side) {                                           \
     assert(direction == 1);                                                    \
@@ -15,10 +33,10 @@ typedef bool (*sudoku_solver)(s_board_t board);
       exit(1);                                                                 \
       return false;                                                            \
     }                                                                          \
-    assert(s_board_side(board) == _side &&                                     \
-           s_board_side_sqrt(board) == _side_sqrt);                            \
-    if (s_board_side(board) != _side ||                                        \
-        s_board_side_sqrt(board) != _side_sqrt) {                              \
+    assert(s_board_side_maybe_inlined(board) == _side &&                       \
+           s_board_side_sqrt_maybe_inlined(board) == _side_sqrt);              \
+    if (s_board_side_maybe_inlined(board) != _side ||                          \
+        s_board_side_sqrt_maybe_inlined(board) != _side_sqrt) {                \
       exit(1);                                                                 \
       return false;                                                            \
     }                                                                          \
@@ -29,7 +47,7 @@ typedef bool (*sudoku_solver)(s_board_t board);
     for (s_size r = start_r; r < side; r++) {                                  \
       for (s_size c = start_c; c < side; c++) {                                \
         /* if the value is solved, continue */                                 \
-        if (s_board_get_at(board, r, c) != 0) {                                \
+        if (s_board_get_at_maybe_inlined(board, r, c) != 0) {                  \
           continue;                                                            \
         }                                                                      \
         dbg_printf("found empty r: %d, c: %d\n", r, c);                        \
@@ -39,35 +57,21 @@ typedef bool (*sudoku_solver)(s_board_t board);
         /* create an array with every possible value */                        \
         s_el __poss[_side];                                                    \
         s_el_array_t poss = s_el_arr_from_buff(__poss, _side);                 \
-        s_el_arr_initialize_1_to_len(&poss);                                   \
+        s_el_arr_initialize_1_to_##_side(&poss);                               \
         /* remove the values already present in this row, col and square */    \
         remove_already_present_on_row(board, r, &poss);                        \
+        __BACKTRACK_SOLVE_BAIL_OUT;                                            \
         remove_already_present_on_column(board, c, &poss);                     \
+        __BACKTRACK_SOLVE_BAIL_OUT;                                            \
         remove_already_present_on_square(board, r, c, &poss);                  \
-        /* if there are no possibilities left, the sudoku is at an unsolvable  \
-         * state */                                                            \
-        if (poss.length == 0) {                                                \
-          dbg_printf("no available at r: %d, c: %d\n", r, c);                  \
-          dbg_flush();                                                         \
-          return false;                                                        \
-        }                                                                      \
-        /* if there is only one possibility, commit it. this avoids creating   \
-         * a*/                                                                 \
-        /*new board and all the other expensive stuff*/                        \
-        if (poss.length == 1) {                                                \
-          s_board_set_at(board, r, c, poss.arr[0]);                            \
-          dbg_printf("found single at r: %d, c: %d = %d\n", r, c,              \
-                     poss.arr[0]);                                             \
-          dbg_flush();                                                         \
-          continue;                                                            \
-        }                                                                      \
+        __BACKTRACK_SOLVE_BAIL_OUT;                                            \
         dbg_print_possibilities(poss);                                         \
         dbg_flush();                                                           \
         /* otherwise, try every possibility until we find an valid one. */     \
         /* steps: create an attempt board*/                                    \
         s_el __attempt_board[_side][_side];                                    \
-        s_board_t attempt_board =                                              \
-            s_board_from_buff((s_el *)__attempt_board, side_sqrt);             \
+        s_board_t attempt_board = s_board_from_buff_maybe_inlined(             \
+            (s_el *)__attempt_board, side_sqrt);                               \
         /* steps: for each possible value*/                                    \
         for (s_size i = 0; i < poss.length; i++) {                             \
           /* reset the attempt board to the current state*/                    \
@@ -102,7 +106,7 @@ typedef bool (*sudoku_solver)(s_board_t board);
         /* we didnt find an suitable value, so this sudoku isnt solvable at    \
          * the */                                                              \
         /* current state. */                                                   \
-        dbg_printf("didnt find at backtrack r: %d, c: %d\n", r, c, );          \
+        dbg_printf("didnt find at backtrack r: %d, c: %d\n", r, c);            \
         dbg_flush();                                                           \
         return false;                                                          \
       found_value:                                                             \
@@ -131,43 +135,46 @@ bool solve_sudoku_1(s_board_t board) {
 }
 
 bool solve_sudoku_4(s_board_t board) {
-  assert(s_board_side(board) == 4);
-  if (s_board_side(board) != 4) {
+  assert(s_board_side_maybe_inlined(board) == 4);
+  if (s_board_side_maybe_inlined(board) != 4) {
     return false;
   }
   return BACKTRACK_SOLVE(4, board);
 }
 
 bool solve_sudoku_9(s_board_t board) {
-  assert(s_board_side(board) == 9);
-  if (s_board_side(board) != 9) {
+  assert(s_board_side_maybe_inlined(board) == 9);
+  if (s_board_side_maybe_inlined(board) != 9) {
     return false;
   }
   return BACKTRACK_SOLVE(9, board);
 }
 
 bool solve_sudoku_16(s_board_t board) {
-  assert(s_board_side(board) == 16);
-  if (s_board_side(board) != 16) {
+  assert(s_board_side_maybe_inlined(board) == 16);
+  if (s_board_side_maybe_inlined(board) != 16) {
     return false;
   }
   return BACKTRACK_SOLVE(16, board);
 }
 
-const sudoku_solver solvers[] = {
+static const sudoku_solver solvers[] = {
     solve_sudoku_1,
     solve_sudoku_4,
     solve_sudoku_9,
     solve_sudoku_16,
 };
-const size_t solvers_length = sizeof(solvers) / sizeof(solvers[0]);
+static const size_t solvers_length = sizeof(solvers) / sizeof(solvers[0]);
 
-bool solve_sudoku(s_board_t board) {
-  if (s_board_side_sqrt(board) <= solvers_length) {
-    printf("solver index %d\n", s_board_side_sqrt(board) - 1);
-    return solvers[s_board_side_sqrt(board) - 1](board);
+bool s_sudoku_solve(s_board_t board) {
+  if (s_board_side_sqrt_maybe_inlined(board) <= solvers_length) {
+    printf("solver index %d\n", s_board_side_sqrt_maybe_inlined(board) - 1);
+    return solvers[s_board_side_sqrt_maybe_inlined(board) - 1](board);
   }
   // it would take waaaaaaaaaaaaaaaaaaay too long
   assert(false);
   return false;
 }
+
+// TODO
+bool s_sudoku_has_many_sols(s_board_t board) { return true; }

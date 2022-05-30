@@ -16,6 +16,7 @@ int main() {
 #include "bits/type.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 int main_generate() {
   const s_size side_sqrt = 3;
@@ -24,13 +25,18 @@ int main_generate() {
   //   return 1;
   // }
   const s_size side = side_sqrt * side_sqrt;
-  s_size side_squared = side * side;
-  // initialize the board to zero
   s_el __solved_board[side][side];
   s_board_t solved_board = s_board_from_buff((s_el *)__solved_board, side_sqrt);
   s_el __board[side][side];
   s_board_t board = s_board_from_buff((s_el *)__board, side_sqrt);
-  generate(solved_board);
+  (void)board;
+  printf("gonna print board at main\n");
+  fflush(stdout);
+  print_board(solved_board);
+  printf("\n");
+  s_sudoku_generate(solved_board);
+  printf("gonna print board at main\n");
+  fflush(stdout);
   print_board(solved_board);
   fflush(stdout);
   return 0;
@@ -44,6 +50,7 @@ int main_read() {
   // }
   const s_size side = side_sqrt * side_sqrt;
   s_size side_squared = side * side;
+  (void)side_squared;
   // initialize the board to zero
   s_el __solved_board[side][side];
   s_board_t solved_board = s_board_from_buff((s_el *)__solved_board, side_sqrt);
@@ -76,7 +83,7 @@ int main_read() {
   printf("p2\n");
   fflush(stdout);
   // solve the sudoku for this initial state
-  bool could_solve = solve_sudoku(board);
+  bool could_solve = s_sudoku_solve(board);
   print_board(board);
   fflush(stdout);
   dbg_printf("sol");

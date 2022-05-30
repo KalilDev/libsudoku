@@ -2,7 +2,6 @@
 #define S_SOLVE_H
 #include "board.h"
 #include <stdbool.h>
-typedef bool (*sudoku_solver)(s_board_t board);
 
 #define BACKTRACK_SOLVE_NAME(n) backtrack_solve_##n
 #define BACKTRACK_SOLVE(n, board) BACKTRACK_SOLVE_NAME(n)(board, 0, 0, 1)
@@ -14,5 +13,6 @@ typedef bool (*sudoku_solver)(s_board_t board);
   bool BACKTRACK_SOLVE_NAME(n)(s_board_t board, s_size start_r,                \
                                s_size start_c, int direction)
 
-bool solve_sudoku(s_board_t board);
+bool s_sudoku_solve(s_board_t board);
+bool s_sudoku_has_many_sols(s_board_t board);
 #endif

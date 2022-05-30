@@ -1,4 +1,5 @@
 #include "generate.h"
+#include "board.h"
 #include "dbg.h"
 #include "rand.h"
 #include "solve.h"
@@ -7,11 +8,12 @@
 #include <stdio.h>
 #include <string.h>
 
-void generate(s_board_t board) {
-  s_size side = s_board_side(board);
-  s_size side_sqrt = s_board_side_sqrt(board);
+void s_sudoku_generate(s_board_t board) {
+  s_size side = s_board_side_maybe_inlined(board);
+  s_size side_sqrt = s_board_side_sqrt_maybe_inlined(board);
   // initialize the board to zero
-  memset(board.board, 0, sizeof(s_el) * s_board_side_squared(board));
+  memset(board.board, 0,
+         sizeof(s_el) * s_board_side_squared_maybe_inlined(board));
   printf("gonna print zeroed board at generate with memset\n");
   print_board(board);
   fflush(stdout);
@@ -50,13 +52,13 @@ void generate(s_board_t board) {
     }
   }
 
-  dbg_print_board(board);
-  dbg_flush();
+  print_board(board);
+  fflush(stdout);
   // now, we are left with an sudoku that has side_sqrt^3 filled cells and
   // side_sqrt^4 - side_sqrt^3 empty cells.
   // this is way less empty cells than what we would have if we only generated a
   // single row/column/diagonal, and it is guaranteed to be solvable.
-  bool solved = solve_sudoku(board);
+  bool solved = s_sudoku_solve(board);
   dbg_print_board(board);
   dbg_flush();
 
