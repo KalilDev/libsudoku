@@ -1,6 +1,9 @@
 #include "rand.h"
 
-int s_rand_state = 1;
+static int s_rand_state = 1;
+
+void s_rand_set_state(int state) { s_rand_state = state; }
+
 int s_rand() {
   int result = s_rand_state;
   result ^= result << 13;
