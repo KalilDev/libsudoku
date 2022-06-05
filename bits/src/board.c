@@ -68,7 +68,7 @@ s_board_t s_stack_board_from_buff_maybe_inlined(s_el *board, s_size side_sqrt) {
 }
 #endif
 
-void print_board(const s_board_t *board) {
+void s_board_print(const s_board_t *board) {
   for (s_size c = 0; c < s_board_side_maybe_inlined(board); c++) {
     printf("{");
     for (s_size r = 0; r < s_board_side_maybe_inlined(board); r++) {
@@ -155,7 +155,7 @@ s_board_t *s_board_new(s_size side_sqrt) {
     return NULL;
   }
   s_board_t *board = (s_board_t *)buffer;
-  s_el *board_els = (s_el *)board + 1;
+  s_el *board_els = (s_el *)((s_board_t *)board + 1);
   // s_el board_els[side_squared]
   board->board = board_els;
   board->__side_sqrt = side_sqrt;

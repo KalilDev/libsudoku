@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
 
-project(sudoku VERSION 2.0.0 DESCRIPTION "An sudoku library")
+project(sudoku VERSION 2.0.1 DESCRIPTION "An sudoku library")
 
 
 # Creates and names a library, sets it as either STATIC
@@ -32,3 +32,7 @@ bits/src/solve.c)
 set_target_properties(sudoku PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sudoku PROPERTIES PUBLIC_HEADER include/libsudoku.h)
 target_include_directories(sudoku PRIVATE bits/include)
+
+add_executable (libsudoku_example ${CMAKE_CURRENT_SOURCE_DIR}/example/main.c)
+target_include_directories(libsudoku_example PRIVATE include)
+target_link_libraries(libsudoku_example PRIVATE sudoku)

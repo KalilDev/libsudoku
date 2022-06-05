@@ -14,7 +14,7 @@ void s_sudoku_generate(s_board_t *board) {
   // initialize the board to zero
   s_board_initialize_to_zero(board);
   printf("gonna print zeroed board at generate with memset\n");
-  print_board(board);
+  s_board_print(board);
   fflush(stdout);
   printf("\n");
   // generate the first row of each square. steps:
@@ -40,7 +40,7 @@ void s_sudoku_generate(s_board_t *board) {
     s_board_set_at(board, selected_r, c, safe);
   }
 
-  print_board(board);
+  s_board_print(board);
   fflush(stdout);
   // now, we are left with an sudoku that has side_sqrt^3 filled cells and
   // side_sqrt^4 - side_sqrt^3 empty cells.

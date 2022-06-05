@@ -68,7 +68,7 @@ s_board_t s_stack_board_from_buff_maybe_inlined(s_el *board, s_size side_sqrt);
 
 s_board_t s_stack_board_from_buff(s_el *board, s_size side_sqrt);
 
-void print_board(const s_board_t *board);
+void s_board_print(const s_board_t *board);
 
 bool s_board_is_value_safe(const s_board_t *board, s_size r, s_size c,
                            s_el attempt);

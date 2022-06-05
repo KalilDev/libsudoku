@@ -11,5 +11,7 @@ void s_board_set_at(s_board_t *board, s_size r, s_size c, s_el value);
 void s_board_copy_into(s_board_t *dest, const s_board_t *src);
 s_board_t *s_board_new(s_size side_sqrt);
 void s_board_free(s_board_t *board);
+void s_sudoku_solve(s_board_t *board);
+void s_board_print(const s_board_t *board);
 void s_sudoku_generate(s_board_t *board);
 bool s_sudoku_has_many_sols(s_board_t *board);
