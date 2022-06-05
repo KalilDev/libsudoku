@@ -1,6 +1,8 @@
 #include "libsudoku.h"
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 int main_generate() {
@@ -10,38 +12,45 @@ int main_generate() {
   //   return 1;
   // }
   const s_size side = side_sqrt * side_sqrt;
-  s_el __solved_board[9][9] = {
+  s_el __solved_board_state[9][9] = {
       {1, 0, 0, 8, 0, 0, 3, 0, 0}, {3, 0, 0, 6, 0, 0, 7, 0, 0},
       {8, 0, 0, 1, 0, 0, 6, 0, 0}, {6, 0, 0, 2, 0, 0, 4, 0, 0},
       {4, 0, 0, 9, 0, 0, 1, 0, 0}, {5, 0, 0, 7, 0, 0, 2, 0, 0},
       {2, 0, 0, 3, 0, 0, 5, 0, 0}, {7, 0, 0, 4, 0, 0, 9, 0, 0},
       {9, 0, 0, 5, 0, 0, 8, 0, 0},
   };
-  s_board_t solved_board = s_board_from_buff((s_el *)__solved_board, side_sqrt);
-  s_el __board[side][side];
-  s_board_t board = s_board_from_buff((s_el *)__board, side_sqrt);
-  (void)board;
+  s_board_t *solved_board = s_board_new(side_sqrt);
+  if (solved_board == NULL) {
+    return 1;
+  }
+  for (s_size i = 0; i < side; i++) {
+    for (s_size j = 0; j < side; j++) {
+      s_board_set_at(solved_board, i, j, __solved_board_state[j][i]);
+    }
+  }
   printf("gonna print board at main\n");
   fflush(stdout);
-  print_board(solved_board);
+  s_board_print(solved_board);
   printf("\n");
   // s_sudoku_generate(solved_board);
   printf("gonna print board at main\n");
   s_sudoku_solve(solved_board);
-  print_board(solved_board);
+  s_board_print(solved_board);
   fflush(stdout);
-  __solved_board[6][5] = 0;
+  s_board_set_at(solved_board, 6, 5, 0);
   puts("");
-  print_board(solved_board);
+  s_board_print(solved_board);
   fflush(stdout);
   printf("has one soln: %i\n", !s_sudoku_has_many_sols(solved_board));
-  print_board(solved_board);
+  s_board_print(solved_board);
   fflush(stdout);
+  s_board_free(solved_board);
   return 0;
 }
 
 int main_read() {
   const s_size side_sqrt = 3;
+  /*
   // int err = fscanf(stdin, "%u", &side_sqrt);
   // if (err != 1 || side_sqrt < 2 || side_sqrt > 4) {
   //   return 1;
@@ -87,7 +96,7 @@ int main_read() {
   dbg_printf("sol");
   dbg_print_board(solved_board);
   dbg_flush();
-  assert(could_solve);
+  assert(could_solve);*/
   return 0;
 }
 
