@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-s_read_result_t s_read(s_board_t board) {
+s_read_result_t s_read(s_board_t *board) {
   {
     const size_t solved_string_size =
         s_board_side_squared_maybe_inlined(board) + 1;

@@ -1,19 +1,4 @@
-#include "bits/board.h"
-#include "bits/type.h"
-#define debugging_fuck_this
-#ifndef debugging_fuck_this
-int main() {
-  s_el __board[9][9];
-  s_board_t board = s_board_from_buff((s_el *)__board, 3);
-  print_board(board);
-}
-#else
-#include "bits/board.h"
-#include "bits/dbg.h"
-#include "bits/generate.h"
-#include "bits/read.h"
-#include "bits/solve.h"
-#include "bits/type.h"
+#include "libsudoku.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -120,4 +105,3 @@ int main() {
   return main_generate();
 #endif
 }
-#endif

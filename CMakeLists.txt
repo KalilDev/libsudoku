@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
 
-project(sudoku VERSION 1.0.0 DESCRIPTION "An sudoku library")
+project(sudoku VERSION 2.0.0 DESCRIPTION "An sudoku library")
 
 
 # Creates and names a library, sets it as either STATIC
@@ -22,13 +22,13 @@ sudoku
 SHARED
 
 # Provides a relative path to your source file(s).
-bits/arr.c
-bits/board.c
-bits/dbg.c
-bits/generate.c
-bits/rand.c
-bits/read.c
-bits/solve.c)
+bits/src/arr.c
+bits/src/board.c
+bits/src/dbg.c
+bits/src/generate.c
+bits/src/rand.c
+bits/src/read.c
+bits/src/solve.c)
 set_target_properties(sudoku PROPERTIES VERSION ${PROJECT_VERSION})
-#set_target_properties(sudoku PROPERTIES PUBLIC_HEADER include/libsudoku.h)
-target_include_directories(sudoku PRIVATE bits)
+set_target_properties(sudoku PROPERTIES PUBLIC_HEADER include/libsudoku.h)
+target_include_directories(sudoku PRIVATE bits/include)

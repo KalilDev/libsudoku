@@ -9,8 +9,8 @@
 #define BACKTRACK_SOLVE_FORWARDS(n, board) BACKTRACK_SOLVE_NAME(n)(board, 1)
 #define BACKTRACK_SOLVE_BACKWARDS(n, board) BACKTRACK_SOLVE_NAME(n)(board, -1)
 #define BACKTRACK_SOLVE_SIGNATURE(n)                                           \
-  bool BACKTRACK_SOLVE_NAME(n)(s_board_t board, int direction)
+  bool BACKTRACK_SOLVE_NAME(n)(s_board_t * board, int direction)
 
-bool s_sudoku_solve(s_board_t board);
-bool s_sudoku_has_many_sols(s_board_t board);
+bool s_sudoku_solve(s_board_t *board);
+bool s_sudoku_has_many_sols(s_board_t *board);
 #endif
