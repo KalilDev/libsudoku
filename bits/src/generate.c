@@ -46,7 +46,8 @@ void s_sudoku_generate(s_board_t *board) {
   // side_sqrt^4 - side_sqrt^3 empty cells.
   // this is way less empty cells than what we would have if we only generated a
   // single row/column/diagonal, and it is guaranteed to be solvable.
-  bool solved = s_sudoku_solve(board);
+  // use flipflopping so that the board pattern is less predictable
+  bool solved = s_sudoku_solve_flipflopping(board);
   dbg_print_board(*board);
   dbg_flush();
 

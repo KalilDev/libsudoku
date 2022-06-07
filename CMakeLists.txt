@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
 
-project(sudoku VERSION 2.0.1 DESCRIPTION "An sudoku library")
+project(sudoku VERSION 2.0.2 DESCRIPTION "An sudoku library")
 
 
 # Creates and names a library, sets it as either STATIC
