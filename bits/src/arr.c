@@ -19,12 +19,6 @@ s_el_array_t s_el_arr_from_buff(s_el *buff, s_size length) {
   return result;
 }
 
-void s_el_arr_initialize_1_to_len(s_el_array_t *arr) {
-  for (s_size i = 0; i < arr->length; i++) {
-    // [i] must fit in an s_el
-    arr->arr[i] = i + 1;
-  }
-}
 #endif
 
 void remove_from_el_arr(s_el_array_t *array, s_el value) {
@@ -61,4 +55,11 @@ void s_el_arr_initialize_1_to_9(s_el_array_t *arr) {
 }
 void s_el_arr_initialize_1_to_16(s_el_array_t *arr) {
   memcpy(arr->arr, s_el_arr_1_to_16, sizeof(s_el) * 16);
+}
+
+void s_el_arr_initialize_1_to_len(s_el_array_t *arr) {
+  for (s_size i = 0; i < arr->length; i++) {
+    // [i] must fit in an s_el
+    arr->arr[i] = i + 1;
+  }
 }

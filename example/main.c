@@ -11,13 +11,27 @@ int main_generate() {
   // if (err != 1 || side_sqrt < 2 || side_sqrt > 4) {
   //   return 1;
   // }
-  const s_size side = side_sqrt * side_sqrt;
+  s_el __board[9][9] = {
+      {5, 0, 0, 0, 0, 3, 1, 9, 0}, {0, 0, 0, 6, 0, 0, 8, 3, 0},
+      {0, 4, 8, 0, 0, 0, 6, 7, 5}, {2, 0, 0, 0, 6, 0, 0, 1, 3},
+      {0, 0, 0, 5, 0, 1, 0, 0, 0}, {1, 5, 0, 0, 9, 0, 0, 0, 8},
+      {8, 7, 2, 0, 0, 0, 3, 4, 0}, {0, 1, 5, 0, 0, 4, 0, 0, 0},
+      {0, 3, 4, 1, 0, 0, 0, 0, 6}};
+  s_board_t *board = s_board_new(side_sqrt);
   s_board_t *solved_board = s_board_new(side_sqrt);
-  if (solved_board == NULL) {
+  if (board == NULL || solved_board == NULL) {
     return 1;
   }
-  s_sudoku_generate(solved_board);
+  s_board_copy_from_buff(board, (s_el *)__board);
+  s_board_copy_from_buff(board, (s_el *)__board);
+  if (!s_sudoku_solve(solved_board)) {
+    return 2;
+  }
   s_board_print(solved_board);
+  s_board_print(board);
+  if (s_sudoku_has_many_sols(board)) {
+    return 3;
+  }
   return 0;
 }
 

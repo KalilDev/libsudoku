@@ -1,6 +1,8 @@
 #include "read.h"
 #include "board.h"
 #include "type.h"
+#include <limits.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -10,11 +12,9 @@ s_read_result_t s_read(s_board_t *board) {
         s_board_side_squared_maybe_inlined(board) + 1;
     char solved_string[solved_string_size];
     if (fgets(solved_string, solved_string_size, stdin) != solved_string) {
-      fprintf(stderr, "foo\n");
       return s_read_e_too_few;
     }
     if (strlen(solved_string) != s_board_side_squared_maybe_inlined(board)) {
-      fprintf(stderr, "bar %s %lu\n", solved_string, strlen(solved_string));
       return s_read_e_too_few;
     }
     for (s_size i = 0; i < s_board_side_squared_maybe_inlined(board); i++) {
