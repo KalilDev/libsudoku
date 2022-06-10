@@ -1,7 +1,6 @@
 #include "solve.h"
 #include "board.h"
 #include "dbg.h"
-#include "type.h"
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -153,50 +152,7 @@ bool s_sudoku_solve_flipflopping(s_board_t *board) {
   return __s_sudoku_solve_flipflopping(board);
 }
 
-bool backtrack_has_one_sol(s_board_t *board) {
-  const s_size side_sqrt = s_board_side_sqrt_maybe_inlined(board);
-  const s_size side = s_board_side_maybe_inlined(board);
-  s_el __attempt_board[side][side];
-  s_board_t attempt_board =
-      s_stack_board_from_buff_maybe_inlined((s_el *)__attempt_board, side_sqrt);
-  s_board_copy_into(&attempt_board, board);
-  /* steps: */
-  /* for each value */
-  for (s_size r = 0; r < side; r++) {
-    for (s_size c = 0; c < side; c++) {
-      /* if the value is solved, continue */
-      if (s_board_get_at_maybe_inlined(board, r, c) != 0) {
-        continue;
-      }
-      s_el soln = 0;
-      /* if the value is not solved, for each possible value */
-      for (s_size v = 1; v <= side; v++) {
-        if (!s_board_is_value_safe(&attempt_board, r, c, v)) {
-          continue;
-        }
-        s_board_copy_into(&attempt_board, board);
-        // set the value and try solving the board
-        s_board_set_at(&attempt_board, r, c, v);
-        if (s_sudoku_solve(&attempt_board)) {
-          // if successful
-          if (soln != 0) {
-            // and we already have an sol, there are multiple solutions
-            return false;
-          }
-          soln = v;
-        }
-      }
-      if (soln == 0) {
-        // there are no solutions
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
 bool s_sudoku_has_many_sols(s_board_t *board) {
-  return !backtrack_has_one_sol(board);
   s_size side = s_board_side_maybe_inlined(board);
   s_size side_sqrt = s_board_side_sqrt_maybe_inlined(board);
   s_el __left_board[side][side];
