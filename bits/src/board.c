@@ -117,6 +117,16 @@ void s_board_set_at(s_board_t *board, s_size r, s_size c, s_el value) {
       value;
 }
 
+void s_board_copy_from_buff(s_board_t *dest, const s_el *src) {
+  memcpy(dest->board, src,
+         sizeof(s_el) * s_board_side_squared_maybe_inlined(dest));
+}
+
+void s_board_copy_into_buff(s_el *dest, const s_board_t *src) {
+  memcpy(dest, src->board,
+         sizeof(s_el) * s_board_side_squared_maybe_inlined(src));
+}
+
 void s_board_copy_into(s_board_t *dest, const s_board_t *src) {
   assert(s_board_side_sqrt_maybe_inlined(dest) ==
          s_board_side_sqrt_maybe_inlined(src));

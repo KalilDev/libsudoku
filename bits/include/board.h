@@ -10,8 +10,8 @@ typedef struct s_board {
 } s_board_t;
 
 #ifdef S_USING_INLINE
-static inline s_size index_from_coordinates_maybe_inlined(s_size r, s_size c,
-                                                          s_size side) {
+inline s_size index_from_coordinates_maybe_inlined(s_size r, s_size c,
+                                                   s_size side) {
   return r * side + c;
 }
 
@@ -74,6 +74,10 @@ bool s_board_is_value_safe(const s_board_t *board, s_size r, s_size c,
                            s_el attempt);
 
 void s_board_set_at(s_board_t *board, s_size r, s_size c, s_el value);
+
+void s_board_copy_from_buff(s_board_t *dest, const s_el *src);
+
+void s_board_copy_into_buff(s_el *dest, const s_board_t *src);
 
 void s_board_copy_into(s_board_t *dest, const s_board_t *src);
 
