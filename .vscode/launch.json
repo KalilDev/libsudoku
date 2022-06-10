@@ -8,13 +8,14 @@
             "name": "(gdb) Iniciar",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/a.out",
+            "program": "${workspaceFolder}/libsudoku_example",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
+            "sourceFileMap": {},
             "setupCommands": [
                 {
                     "description": "Habilitar a reformatação automática para gdb",
