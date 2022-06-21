@@ -9,6 +9,8 @@ cmake_minimum_required(VERSION 3.18.1)
 
 project(sudoku VERSION 2.0.4 DESCRIPTION "An sudoku library")
 
+include(GNUInstallDirs)
+
 option(EXAMPLE "Compile the example binaries.")
 option(DEBUG "Compile with debugging information.")
 option(PROFILE "Compile with profiling information.")
@@ -54,9 +56,13 @@ set_target_properties(sudoku PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sudoku PROPERTIES SOVERSION ${PROJECT_VERSION})
 set_target_properties(sudoku PROPERTIES PUBLIC_HEADER include/libsudoku.h)
 target_include_directories(sudoku PRIVATE bits/include)
+install(TARGETS sudoku
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(EXAMPLE)
     add_executable (libsudoku_example ${CMAKE_CURRENT_SOURCE_DIR}/example/main.c)
     target_include_directories(libsudoku_example PRIVATE include)
     target_link_libraries(libsudoku_example PRIVATE sudoku)
+    install(TARGETS libsudoku_example DESTINATION bin)
 endif()
